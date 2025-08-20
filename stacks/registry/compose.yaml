@@ -2,21 +2,47 @@ version: "3.8"
 
 volumes:
   registry_data:
+  registry_auth:
 
 services:
+  # One-shot job to generate /auth/htpasswd from secrets
+  registry-auth-init:
+    image: httpd:2
+    command: >
+      sh -c 'htpasswd -Bbn "$$REGISTRY_USER" "$$REGISTRY_PASS" > /auth/htpasswd'
+    environment:
+      REGISTRY_USER: ${REGISTRY_USER:?set in Komodo}
+      REGISTRY_PASS: ${REGISTRY_PASS:?set in Komodo}
+    volumes:
+      - registry_auth:/auth
+    restart: "no"
+
   registry:
     image: registry:2
     restart: unless-stopped
+    depends_on:
+      registry-auth-init:
+        condition: service_completed_successfully
+    environment:
+      # storage
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+      # auth (basic)
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      # (optional) allow CORS for web UIs; safe to leave
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Origin: '["*"]'
+      REGISTRY_HTTP_HEADERS_Access-Control-Allow-Methods: '["HEAD","GET","OPTIONS","DELETE","PUT","POST"]'
     volumes:
       - registry_data:/var/lib/registry
-      - ./config.yml:/etc/docker/registry/config.yml:ro
+      - registry_auth:/auth:ro
     networks:
       - cloudflare-net
     labels:
       - dockflare.enable=true
       - dockflare.hostname=registry.costic.dev
       - dockflare.service=http://registry:5000
-      - dockflare.access.policy=bypass
+      - dockflare.access.policy=bypass   # public, but requires Docker login
 
 networks:
   cloudflare-net:
