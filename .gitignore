@@ -1,0 +1,6 @@
+.claude
+.env
+
+# special configs
+config.json
+compose.env

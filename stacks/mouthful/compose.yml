@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  mouthful:
+    image: vkuznecovas/mouthful:latest
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/data   # must contain config.json
+    networks:
+      - cloudflare-net
+    labels:
+      - "dockflare.enable=true"
+      - "dockflare.hostname=comments.costic.dev"
+      - "dockflare.service=http://mouthful:8080"
+      - "dockflare.access.policy=bypass" # public comments
+
+networks:
+  cloudflare-net:
+    external: true
+    name: cloudflare-net

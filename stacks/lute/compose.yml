@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  lute:
+    image: jzohrab/lute3:latest
+    restart: unless-stopped
+    volumes:
+      - lute_data:/lute_data
+      - lute_backups:/lute_backup
+    networks:
+      - cloudflare-net
+    labels:
+      - "dockflare.enable=true"
+      - "dockflare.hostname=lute.costic.dev"
+      - "dockflare.service=http://lute:5001"
+      - "dockflare.access.policy=authenticate"
+
+volumes:
+  lute_data:
+  lute_backups:
+
+networks:
+  cloudflare-net:
+    external: true
+    name: cloudflare-net

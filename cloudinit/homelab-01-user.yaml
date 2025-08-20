@@ -1,0 +1,40 @@
+#cloud-config
+hostname: homelab-01
+timezone: America/New_York
+users:
+  - name: carter
+    groups: [sudo, docker]
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh-authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINsvTG0uUG//DWlJx8EI0oLlxl/RxfwXLcmPpwUDuNZT cartercostic@gmail.com # my personal public key
+
+package_update: true
+packages:
+  - qemu-guest-agent
+  - curl
+  - git
+  - ca-certificates
+  - gnupg
+  - docker.io
+
+runcmd:
+  # Install Docker CE (official repo)
+  - bash -lc 'install -m 0755 -d /etc/apt/keyrings'
+  - bash -lc 'sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc'
+  - bash -lc 'sudo chmod a+r /etc/apt/keyrings/docker.asc'
+  - bash -lc 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list'
+  - bash -lc 'sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin'
+  - bash -lc 'usermod -aG docker carter'
+  - systemctl enable --now docker
+
+  # Get Komodo Core (MongoDB backend)
+  - bash -lc 'mkdir -p /opt/komodo && cd /opt/komodo && \
+    wget -q https://raw.githubusercontent.com/moghtech/komodo/main/compose/mongo.compose.yaml && \
+    wget -q https://raw.githubusercontent.com/moghtech/komodo/main/compose/compose.env && \
+    docker compose -p komodo -f mongo.compose.yaml --env-file compose.env up -d'
+  # Bring up Komodo Core now (you can edit ports in compose.env later)
+  - bash -lc 'cd /opt/komodo && docker compose -p komodo -f ferretdb.compose.yaml --env-file compose.env up -d'
+
+
+final_message: "Cloud-init finished. Docker + Komodo Core are up."
