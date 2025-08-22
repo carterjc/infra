@@ -10,6 +10,7 @@ services:
       - cloudflare-net
     labels:
       - "dockflare.enable=true"
+      - "dockflare.access.name=comments"
       - "dockflare.hostname=comments.costic.dev"
       - "dockflare.service=http://mouthful:8080"
       - "dockflare.access.policy=bypass" # public comments

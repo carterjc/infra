@@ -17,9 +17,10 @@ services:
       - cloudflare-net
     labels:
       - "dockflare.enable=true"
+      - "dockflare.access.name=links"
       - "dockflare.hostname=links.costic.dev"
       - "dockflare.service=http://linkding:9090"
-      - "dockflare.access.policy=authenticate" # require login via CF Access
+      - "dockflare.access.policy=bypass"
 
 volumes:
   linkding_data:
