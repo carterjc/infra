@@ -17,7 +17,7 @@ Also, the Proxmox VM's console login isn't configured, so use ssh instead (user:
 
 ```bash
 # up
-docker compose -p komodo -f komodo/ferretdb.compose.yaml --env-file komodo/compose.env up -d
+docker compose -p komodo -f ferretdb.compose.yml --env-file compose.env up -d
 # down
-docker compose -p komodo -f komodo/ferretdb.compose.yaml --env-file komodo/compose.env down
+docker compose -p komodo -f ferretdb.compose.yml --env-file compose.env down
 ```

@@ -4,6 +4,8 @@ services:
   mouthful:
     image: vkuznecovas/mouthful:latest
     restart: unless-stopped
+    ports:
+      - 8100:8080
     volumes:
       - ./config:/app/data   # must contain config.json
     networks:
@@ -12,7 +14,7 @@ services:
       - "dockflare.enable=true"
       - "dockflare.access.name=comments"
       - "dockflare.hostname=comments.costic.dev"
-      - "dockflare.service=http://mouthful:8080"
+      - "dockflare.service=http://mouthful:8100"
       - "dockflare.access.policy=bypass" # public comments
 
 networks:
