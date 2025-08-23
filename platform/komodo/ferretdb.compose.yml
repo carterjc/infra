@@ -55,8 +55,6 @@ services:
       KOMODO_DATABASE_USERNAME: ${KOMODO_DB_USERNAME}
       KOMODO_DATABASE_PASSWORD: ${KOMODO_DB_PASSWORD}
     volumes:
-      # mount app repo
-      - /home/carter/infra:/infra
       ## Store dated backups of the database - https://komo.do/docs/setup/backup
       - ${COMPOSE_KOMODO_BACKUPS_PATH}:/backups
       ## Store sync files on server
@@ -78,6 +76,8 @@ services:
     restart: unless-stopped
     env_file: ./compose.env
     volumes:
+      # mount app repo since we're not using systemd
+      - /home/carter/infra:/infra
       ## Mount external docker socket
       - /var/run/docker.sock:/var/run/docker.sock
       ## Allow Periphery to see processes outside of container
