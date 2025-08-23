@@ -1,6 +1,7 @@
 # services
 
-## registry
+This Git repo serves as a declarative, versioned store for some of the applications deployed on my server.
 
-registry is deployed from local
-run `docker run --rm httpd:2 htpasswd -Bbn carter password > htpasswd` before deploying
+[linkding](/stacks/linkding) - bookmark manager, hosted at `links.costic.dev`.
+[lute](/stacks/lute) - nice for language learning, hosted at `lute.costic.dev` (auth protected)
+[mouthful](/stacks/mouthful) - comments for `costic.dev`, hosted `comments.costic.dev`
