@@ -4,17 +4,18 @@ services:
   mouthful:
     image: vkuznecovas/mouthful:latest
     restart: unless-stopped
+    user: "1000:1000" # drop root warning
     ports:
       - 8100:8080
     volumes:
-      - ./config:/app/data   # must contain config.json
+      - /home/carter/infra/stacks/mouthful:/app/data   # must contain config.json
     networks:
       - cloudflare-net
     labels:
       - "dockflare.enable=true"
       - "dockflare.access.name=comments"
       - "dockflare.hostname=comments.costic.dev"
-      - "dockflare.service=http://mouthful:8100"
+      - "dockflare.service=http://mouthful:8080" # dockflare doesn't care about host:container mapping
       - "dockflare.access.policy=bypass" # public comments
 
 networks:

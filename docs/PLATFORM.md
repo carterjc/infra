@@ -1,9 +1,5 @@
 # platform
 
-Using Komodo's ferretdb offering because my Proxmox server can't run MongoDB 5
-
-`WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!`
-
 ## access
 
 Komodo is only accessible on the internal network. For reference,
@@ -13,7 +9,17 @@ Komodo is only accessible on the internal network. For reference,
 
 Also, the Proxmox VM's console login isn't configured, so use ssh instead (user: `carter`).
 
-## Komodo up/down
+## notes
+
+Using Komodo's ferretdb offering because my Proxmox server can't run MongoDB 5.
+
+```WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!```
+
+---
+
+Periphery servers are not using systemd so can't natively access fs - there's a custom mount in [the Komodo compose file](/platform/komodo/ferretdb.compose.yml) to circumvent this.
+
+## Komodo commands
 
 ```bash
 # up
