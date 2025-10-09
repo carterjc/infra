@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mouthful:
-    image: vkuznecovas/mouthful:latest
+    image: vkuznecovas/mouthful:exp-150 # temp until latest is updated
     restart: unless-stopped
     user: "1000:1000" # drop root warning
     ports:
