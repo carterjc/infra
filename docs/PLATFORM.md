@@ -4,8 +4,8 @@
 
 Komodo is only accessible on the internal network. For reference,
 
-- `http://10.0.0.59:9120/`: Komodo (`carter` and `admin` accounts)
-- `http://10.0.0.59:5000/`: Dockflare
+- `http://10.0.0.51:9120/`: Komodo (`carter` and `admin` accounts)
+- `http://10.0.0.51:5000/`: Dockflare
 
 Also, the Proxmox VM's console login isn't configured, so use ssh instead (user: `carter`).
 
